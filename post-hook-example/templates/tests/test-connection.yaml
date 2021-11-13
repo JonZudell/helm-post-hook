@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "post-hook-example.fullname" . }}-test-connection"
+  labels:
+    {{- include "post-hook-example.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "post-hook-example.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
